@@ -16,7 +16,7 @@ def header_menu():
 @app.route('/')
 def index():
     context = {'menu': header_menu(), 'title': 'Главная', 'cur_url': '/'}
-    return render_template('index_2.html', **context)
+    return render_template('index.html', **context)
 
 
 @app.route('/top/')
