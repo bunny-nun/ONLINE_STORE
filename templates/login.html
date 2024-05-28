@@ -10,7 +10,7 @@
         Свяжитесь с нами:
     </h1>
     <div class="form">
-        <form action="/contacts" method="post">
+        <form action="{{ url_for('login') }}" method="post">
             <input type="text" name="name" placeholder="Введите имя"
                    class="placeholder"><br><br>
             <input type="email" name="email"
@@ -21,3 +21,4 @@
     </div>
 </div>
 {% endblock %}
+

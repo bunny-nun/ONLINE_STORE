@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ super() }} - {{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="top">
+    <h1 class="top_contacts">
+        Добро пожаловать, {{ name }}!
+    </h1>
+    <div class="form">
+        <form action="{{ url_for('logout') }}" method="post">
+        <button type="submit" class="submit">Выйти</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

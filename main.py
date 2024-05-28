@@ -1,67 +1,57 @@
-from flask import Flask, request, render_template
-import logging
+from flask import Flask, request, render_template, session, redirect, url_for
 
 app = Flask(__name__)
 app.secret_key = b'382f6e6456a59eb1cade6c54d6c696a39f44b062c440a396ef35563013a86477'
-logger = logging.getLogger(__name__)
+app.session_cookie_secure = True
 
 
 def header_menu():
     menu = [{'title': "Главная", 'url': '/'},
-            {'title': "Блузки и рубашки", 'url': '/top/'},
-            {'title': "Брюки", 'url': '/pants/'},
-            {'title': "Обувь", 'url': '/shoes/'},
-            {'title': "Контакты", 'url': '/contacts/'}]
+            {'title': "Блузки и рубашки", 'url': '#'},
+            {'title': "Брюки", 'url': '#'},
+            {'title': "Обувь", 'url': '#'},
+            {'title': "Контакты", 'url': '#'}]
     return menu
 
 
 @app.route('/')
 def index():
+    if 'name' in session:
+        return redirect(url_for('welcome'))
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/login/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        if name and email:
+            session['name'] = name
+            session['email'] = email
+            return redirect(url_for('welcome'))
     context = {'menu': header_menu(),
-               'title': 'Главная',
-               'cur_url': '/'}
-    return render_template('index.html', **context)
+               'title': 'Войти',
+               'cur_url': '/login/'}
+    return render_template('login.html', **context)
 
 
-@app.route('/top/')
-def top():
+@app.route('/welcome/', methods=['GET', 'POST'])
+def welcome():
+    name = session.get('name')
     context = {'menu': header_menu(),
-               'title': 'Блузки и рубашки',
-               'cur_url': '/top/'}
-    return render_template('top.html', **context)
+               'title': 'Добро пожаловать',
+               'cur_url': '/login/',
+               'name': name}
+    return render_template('welcome.html', **context)
 
 
-@app.route('/pants/')
-def pants():
-    context = {'menu': header_menu(),
-               'title': 'Брюки',
-               'cur_url': '/pants/'}
-    return render_template('pants.html', **context)
-
-
-@app.route('/shoes/')
-def shoes():
-    context = {'menu': header_menu(),
-               'title': 'Обувь',
-               'cur_url': '/shoes/'}
-    return render_template('shoes.html', **context)
-
-
-@app.route('/contacts/')
-def contacts():
-    context = {'menu': header_menu(),
-               'title': 'Контакты',
-               'cur_url': '/contacts/'}
-    return render_template('contacts.html', **context)
-
-
-@app.errorhandler(404)
-def page_not_found(e):
-    logger.warning(e)
-    context = {'menu': header_menu(),
-               'title': 'Страница не найдена',
-               'url': request.base_url}
-    return render_template('404.html', **context), 404
+@app.route('/logout/', methods=['POST'])
+def logout():
+    session.pop('name', None)
+    session.pop('email', None)
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
