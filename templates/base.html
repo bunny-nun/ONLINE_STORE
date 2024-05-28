@@ -17,13 +17,14 @@
 <div class="top">
     <header>
         <div class="logo_group">
-            <img src="/static/images/logo_main_1.svg" alt="main_logo"
-                 class="logo_image">
+            <img src="{{ url_for('static', filename='images/logo_main_1.svg')}}"
+                 alt="main_logo" class="logo_image">
         </div>
         <div class="header_menu">
             {% for page in menu %}
             {% if page.url == cur_url %}
-            <a class="header_link_selection" href="{{ page.url }}">{{ page.title
+            <a class="header_link_selection" href="{{ page.url }}">{{
+                page.title
                 }}</a>
             {% else %}
             <a class="header_link" href="{{ page.url }}">{{ page.title }}</a>

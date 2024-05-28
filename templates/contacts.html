@@ -5,5 +5,19 @@
 {% endblock %}
 
 {% block content %}
-
+<div class="top">
+    <h1 class="top_contacts">
+        Свяжитесь с нами:
+    </h1>
+    <div class="form">
+        <form action="/contacts" method="post">
+            <input type="text" name="name" placeholder="Введите имя"
+                   class="placeholder"><br><br>
+            <input type="email" name="email"
+                   placeholder="Введите e-mail"
+                   class="placeholder"><br><br><br>
+            <input type="submit" value="Отправить" class="submit">
+        </form>
+    </div>
+</div>
 {% endblock %}
